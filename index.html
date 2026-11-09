@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyHome.ge / SS.ge — ახალი ატრიუმის 3 პოსტის სიმულატორი</title>
+  <title>MyHome.ge / SS.ge — ახალი ატრიუმის 3 პოსტის სიმულატორი (6 ფოტო)</title>
   <style>
     :root {
       --bg: #f3f5f8;
@@ -94,24 +94,6 @@
       flex-wrap: wrap;
     }
 
-    .tab-btn {
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--text);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .tab-btn.active {
-      background: var(--dark-navy);
-      color: #fff;
-      border-color: var(--dark-navy);
-    }
-
     .cover-toggle-btn {
       border: 1px solid #cbd5e1;
       background: #fffbeb;
@@ -166,7 +148,7 @@
       padding: 10px 20px;
     }
 
-    /* SECTION 1: MYHOME FEED CARDS (3-Column Grid + Horizontal Feed) */
+    /* SECTION 1: MYHOME FEED CARDS */
     .section-title {
       font-size: 19px;
       font-weight: 800;
@@ -244,11 +226,6 @@
       object-fit: cover;
       display: block;
       cursor: pointer;
-    }
-
-    .mh-card-media img.contain-mode {
-      object-fit: contain;
-      background: #111827;
     }
 
     .slider-nav {
@@ -450,7 +427,7 @@
       font-size: 14px;
     }
 
-    /* 10-PHOTO SEQUENCE STRIP */
+    /* 6-PHOTO SEQUENCE STRIP */
     .sequence-heading {
       font-size: 15px;
       font-weight: 800;
@@ -463,12 +440,18 @@
 
     .photo-sequence-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 12px;
       margin-bottom: 24px;
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1100px) {
+      .photo-sequence-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 650px) {
       .photo-sequence-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -661,7 +644,7 @@
       </div>
       <div class="mh-controls">
         <button class="cover-toggle-btn" id="swapCoverBtn" onclick="toggleCoverMode()">
-          🔄 შეცვალე #1 და #2 ფოტო (ფასადი vs 3D იზომეტრია Cover-ად)
+          🔄 შეცვალე #1 და #2 ფოტო (ინტერიერი vs 3D იზომეტრია Cover-ად)
         </button>
       </div>
     </div>
@@ -673,16 +656,9 @@
       <span class="pill highlight">📍 თბილისი, საბურთალო, სააკაძე</span>
       <span class="pill highlight">🏢 პროექტი: ახალი ატრიუმი (NEW ATRIUM)</span>
       <span class="pill">💵 საბაზისო ფასი: $2,200 / მ² (+ დღგ)</span>
-      <span class="pill">🟢 პოსტი #1: 50 მ² ($110,000)</span>
-      <span class="pill">🟠 პოსტი #2: 100 მ² ($220,000)</span>
-      <span class="pill">🔴 პოსტი #3: 150 მ² ($330,000)</span>
-    </div>
-    <div class="mh-filter-pills" style="margin-top: 8px; background: #ecfdf5; border-color: #a7f3d0;">
-      <strong style="font-size:12.5px; color:#065f46;">🟢 პოსტ #1-ის (50 მ²) ქავერის ვარიანტები:</strong>
-      <button class="tab-btn" onclick="setPost1Cover(0)">ვარიანტი 1: Office 301 (NEW ATRIUM ლოგოთი — 5K)</button>
-      <button class="tab-btn" onclick="setPost1Cover(1)">ვარიანტი 2: სტუდიო ყავის ზონით (5K)</button>
-      <button class="tab-btn" onclick="setPost1Cover(2)">ვარიანტი 3: კაბინეტი მტკვრის/ხიდის ხედით</button>
-      <button class="tab-btn" onclick="setPost1Cover(3)">ვარიანტი 4: ვიტრაჟული ოფისი ატრიუმის ხედით</button>
+      <span class="pill">🟢 პოსტი #1: 50 მ² ($110,000) • 6 ფოტო</span>
+      <span class="pill">🟠 პოსტი #2: 100 მ² ($220,000) • 6 ფოტო</span>
+      <span class="pill">🔴 პოსტი #3: 150 მ² ($330,000) • 6 ფოტო</span>
     </div>
   </div>
 
@@ -692,17 +668,17 @@
       <span>1. როგორ ჩანს სამივე განცხადება MyHome.ge / SS.ge-ს საძიებო ლენტაში (Feed)</span>
     </div>
     <p class="section-sub">
-      ისრებით (◀ ▶) პირდაპირ ბარათზევე შეგიძლია გადაფურცლო 10-ვე ფოტო ზუსტად იმ რიგითობით, რა რიგითობითაც დაიდება საიტზე.
+      ისრებით (◀ ▶) პირდაპირ ბარათზევე შეგიძლია გადაფურცლო 6-ვე ფოტო ზუსტად იმ რიგითობით, რა რიგითობითაც დაიდება საიტზე.
     </p>
 
     <div class="feed-grid" id="feedGrid"></div>
 
-    <!-- SECTION 2: Detailed 10-photo order + Copywriting for each post -->
+    <!-- SECTION 2: Detailed 6-photo order + Copywriting for each post -->
     <div class="section-title" style="margin-top: 20px;">
-      <span>2. სამივე პოსტის სრული გაშლა: რომელი ფოტო რის მერე მიდის (1–10) და რა ტექსტი აწერია</span>
+      <span>2. სამივე პოსტის სრული გაშლა: 6-ფოტოიანი წყობა (1–6) და Copy-Paste ტექსტები</span>
     </div>
     <p class="section-sub">
-      დააწკაპუნე ნებისმიერ ფოტოზე გასადიდებლად. თითოეული პოსტის ქვემოთ მოცემულია ზუსტი სათაური, პარამეტრები და Copy-Paste აღწერა.
+      დააწკაპუნე ნებისმიერ ფოტოზე გასადიდებლად. თითოეული პოსტის ქვემოთ მოცემულია ზუსტი სათაური, პარამეტრები და აღწერა.
     </p>
 
     <div id="detailSections"></div>
@@ -723,31 +699,6 @@
 
   <script>
     let use3DAsCover = false;
-    const POST1_COVERS = [
-      {
-        src: "Post_1_50m2/01_Office_Interior_5K.jpg",
-        label: "ფოტო #1 (Cover) — თანამედროვე ოფისი NEW ATRIUM ლოგოთი (5K)"
-      },
-      {
-        src: "Post_1_50m2/alt_cover_coworking_5K.jpg",
-        label: "ფოტო #1 (Cover) — საოფისე სტუდიო ყავის კუთხითა და ლაუნჯით (5K)"
-      },
-      {
-        src: "Post_1_50m2/alt_cover_library.jpg",
-        label: "ფოტო #1 (Cover) — კომპაქტური კაბინეტი მტკვრისა და ხიდის ხედით"
-      },
-      {
-        src: "Post_1_50m2/alt_cover_boardroom.jpg",
-        label: "ფოტო #1 (Cover) — ვიტრაჟული ოფისი ატრიუმის ხედით"
-      }
-    ];
-
-    function setPost1Cover(idx) {
-      POSTS[0].photos[0].src = POST1_COVERS[idx].src;
-      POSTS[0].photos[0].label = POST1_COVERS[idx].label;
-      sliderIndex[1] = 0;
-      renderAll();
-    }
 
     const POSTS = [
       {
@@ -772,7 +723,7 @@
           {
             src: "Post_1_50m2/02_3D_Isometric_50m2.jpg",
             label: "ფოტო #2 — 50 მ² 3D იზომეტრია (4:3 მოუჭრელი ფორმატი)",
-            why: "მე-2 ფოტოზე გადასვლისთანავე მყიდველი ხედავს ზუსტ 50 მ² 3D გეგმარებას, მასშტაბსა და ფასს"
+            why: "მე-2 ფოტოზე მყიდველი ეგრევე ხედავს ზუსტ 50 მ² 3D გეგმარებას, მასშტაბსა და ფასს"
           },
           {
             src: "Post_1_50m2/03_Exterior_Facade_4K.jpg",
@@ -780,39 +731,19 @@
             why: "მე-3 ფოტოზე ხედავს თვითონ A-კლასის ბიზნესცენტრ „ახალ ატრიუმს“ გარედან"
           },
           {
-            src: "Post_1_50m2/04_3D_Isometric_75m2.jpg",
-            label: "ფოტო #4 — 75 მ² 3D იზომეტრია (ალტერნატიული ზომა)",
-            why: "აჩვენებს მყიდველს, რომ იქვეა 75 მ² ვარიანტიც უფრო დიდი გუნდისთვის"
+            src: "Post_1_50m2/04_Office_Interior_2.jpg",
+            label: "ფოტო #4 — კომპაქტური კაბინეტის ინტერიერი",
+            why: "მეორე შიდა რაკურსი მტკვრისა და ხიდის ხედით"
           },
           {
-            src: "Post_1_50m2/05_Office_Interior_2.jpg",
-            label: "ფოტო #5 — კომპაქტური კაბინეტის ინტერიერი",
-            why: "მეორე შიდა რაკურსი მცირე საკონსულტაციო/იურიდიული გუნდისთვის"
+            src: "Post_1_50m2/05_Central_Atrium_5K.jpg",
+            label: "ფოტო #5 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            why: "შენობის მთავარი სავიზიტო ბარათი და ბუნებრივი სინათლის წყარო"
           },
           {
             src: "Post_1_50m2/06_Lobby_Reception_5K.jpg",
             label: "ფოტო #6 — წარმომადგენლობითი ლობი და მიმღები (5K)",
             why: "სტუმრის და კლიენტის პირველი შთაბეჭდილება შენობაში შემოსვლისას"
-          },
-          {
-            src: "Post_1_50m2/07_Central_Atrium_5K.jpg",
-            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
-            why: "შენობის მთავარი სავიზიტო ბარათი და ბუნებრივი სინათლის წყარო"
-          },
-          {
-            src: "Post_1_50m2/08_Floorplan_01_Units.png",
-            label: "ფოტო #8 — სართულის არქიტექტურული გეგმა (NS Studio)",
-            why: "ჩანს ზუსტი კვადრატულობები: 32.5 მ², 34.4 მ², 52.15 მ², 55.8 მ², 65.2 მ², 70 მ²"
-          },
-          {
-            src: "Post_1_50m2/09_Business_Cafe_Lounge_5K.jpg",
-            label: "ფოტო #9 — ბიზნეს-კაფე და ლაუნჯი (5K)",
-            why: "ყოველდღიური კომფორტი თანამშრომლებისა და საქმიანი შეხვედრებისთვის"
-          },
-          {
-            src: "Post_1_50m2/10_Location_Map_Saakadze.jpg",
-            label: "ფოტო #10 — ლოკაციის რუკა (სააკაძის II გას. #19)",
-            why: "აჩვენებს მისადგომობას ვახუშტის ხიდიდან (2 წთ) და სააკაძის მოედნიდან (3 წთ)"
           }
         ],
         description: `იყიდება A-კლასის საოფისე ფართები მშენებარე ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — საბურთალოს ბიზნეს-ცენტრში, გ. სააკაძის II გასასვლელი #19 (ვახუშტის ხიდიდან 2 წუთში, სააკაძის მოედნიდან 3 წუთში).
@@ -869,37 +800,17 @@
           {
             src: "Post_2_100m2/04_Open_Space_Interior_5K.jpg",
             label: "ფოტო #4 — 10–14 კაციანი Open Space ინტერიერი (5K)",
-            why: "აჩვენებს გუნდური მუშაობის სივრცეს და აკუსტიკურ ჭერს"
+            why: "აჩვენებს გუნდური მუშაობის სივრცეს, ლაუნჯსა და ყავის ზონას"
           },
           {
-            src: "Post_2_100m2/05_Meeting_Room.jpg",
-            label: "ფოტო #5 — თათბირების ოთახი (Meeting Room)",
-            why: "აჩვენებს შუშის ტიხრებით გამოყოფილ შეხვედრების ზონას"
-          },
-          {
-            src: "Post_2_100m2/06_Business_Cafe_Lounge_5K.jpg",
-            label: "ფოტო #6 — ბიზნეს-კაფე და ლაუნჯი (5K)",
-            why: "ყოველდღიური კომფორტი თანამშრომლებისა და საქმიანი შეხვედრებისთვის"
-          },
-          {
-            src: "Post_2_100m2/07_Central_Atrium_5K.jpg",
-            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            src: "Post_2_100m2/05_Central_Atrium_5K.jpg",
+            label: "ფოტო #5 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
             why: "აჩვენებს შიდა ატრიუმის მასშტაბსა და გალერეებს"
           },
           {
-            src: "Post_2_100m2/08_Floorplan_02_Units.png",
-            label: "ფოტო #8 — მე-2 სართულის არქიტექტურული ნახაზი",
-            why: "ჩანს 90.72 მ², 103.1 მ², 105.38 მ², 122.37 მ² და 137.62 მ² ერთეულები"
-          },
-          {
-            src: "Post_2_100m2/09_Lobby_Reception_5K.jpg",
-            label: "ფოტო #9 — ლობი და მიმღები (5K)",
+            src: "Post_2_100m2/06_Lobby_Reception_5K.jpg",
+            label: "ფოტო #6 — ლობი და მიმღები (5K)",
             why: "A-კლასის ბიზნესცენტრის შესასვლელი და კონსიერჟის ზონა"
-          },
-          {
-            src: "Post_2_100m2/10_Location_Map_Saakadze.jpg",
-            label: "ფოტო #10 — ლოკაციის რუკა",
-            why: "სააკაძის II გასასვლელი #19 — მისადგომობა ყველა კვანძიდან"
           }
         ],
         description: `იყიდება პრემიუმ კლასის საოფისე ფართები მშენებარე A-კლასის ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — გ. სააკაძის II გასასვლელი #19.
@@ -958,34 +869,14 @@
             why: "კორპორატიული მყიდველისთვის აუცილებელი საპრეზენტაციო/სათათბირო სივრცე"
           },
           {
-            src: "Post_3_150m2/05_President_Suite_5K.jpg",
-            label: "ფოტო #5 — დამფუძნებლის / CEO-ს კაბინეტი (5K)",
-            why: "უმაღლესი კლასის აღმასრულებელი სივრცე პანორამული ვიტრაჟებით"
+            src: "Post_3_150m2/05_Central_Atrium_5K.jpg",
+            label: "ფოტო #5 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            why: "აჩვენებს მთლიანი სართულებისა და ატრიუმის კავშირს"
           },
           {
             src: "Post_3_150m2/06_Lobby_Reception_5K.jpg",
             label: "ფოტო #6 — წარმომადგენლობითი ლობი და მიმღები (5K)",
             why: "სტუმრებისა და პარტნიორების დახვედრის სივრცე"
-          },
-          {
-            src: "Post_3_150m2/07_Central_Atrium_5K.jpg",
-            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
-            why: "აჩვენებს მთლიანი სართულებისა და ატრიუმის კავშირს"
-          },
-          {
-            src: "Post_3_150m2/08_Floorplan_03_04_Units.png",
-            label: "ფოტო #8 — მსხვილი ბლოკების არქიტექტურული გეგმა",
-            why: "ნაჩვენებია 180.2 მ², 203.9 მ², 368.5 მ², 398.4 მ² და მთლიანი სართულის (1,650 მ²) კონფიგურაცია"
-          },
-          {
-            src: "Post_3_150m2/09_Wellness_Fitness_4K.jpg",
-            label: "ფოტო #9 — ფიტნეს და ველნეს ზონა (4K)",
-            why: "მსხვილი კომპანიებისთვის HR-უპირატესობა (თანამშრომლების კეთილდღეობა შენობაშივე)"
-          },
-          {
-            src: "Post_3_150m2/10_Location_Map_Saakadze.jpg",
-            label: "ფოტო #10 — ლოკაციის რუკა",
-            why: "გ. სააკაძის II გასასვლელი #19"
           }
         ],
         description: `იყიდება მსხვილი კორპორატიული საოფისე ფართები A-კლასის ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — გ. სააკაძის II გასასვლელი #19, საბურთალო.
@@ -1043,7 +934,7 @@
             <span>NEW ATRIUM</span>
           </div>
           <div class="mh-card-media">
-            <span class="photo-role-pill">${curIdx + 1}/10: ${curPhoto.label.replace(/^ფოტო #\d+\s*(\(Cover\))?\s*—\s*/, '')}</span>
+            <span class="photo-role-pill">${curIdx + 1}/${photos.length}: ${curPhoto.label.replace(/^ფოტო #\d+\s*(\(Cover\))?\s*—\s*/, '')}</span>
             <img
               src="${curPhoto.src}"
               alt="${post.title}"
@@ -1070,7 +961,7 @@
             </div>
             <div class="mh-address">📍 თბილისი, საბურთალო, გ. სააკაძის II გასასვლელი #19</div>
             <div class="mh-card-actions">
-              <a href="#post-detail-${post.id}" class="btn-Jump">👇 ნახე 10-ვე ფოტოს წყობა და ტექსტი</a>
+              <a href="#post-detail-${post.id}" class="btn-Jump">👇 ნახე 6-ვე ფოტოს წყობა და ტექსტი</a>
             </div>
           </div>
         `;
@@ -1119,7 +1010,7 @@
           </div>
 
           <div class="sequence-heading">
-            <span>📸 ფოტოების ზუსტი რიგითობა (1-დან 10-მდე) — დააწკაპუნე გასადიდებლად:</span>
+            <span>📸 ფოტოების ზუსტი რიგითობა (1-დან 6-მდე) — დააწკაპუნე გასადიდებლად:</span>
           </div>
           <div class="photo-sequence-grid">
             ${seqHtml}
@@ -1151,8 +1042,8 @@
       sliderIndex[3] = 0;
       const btn = document.getElementById("swapCoverBtn");
       btn.textContent = use3DAsCover
-        ? "🔄 ახლა #1 ფოტოდ აყენია 3D იზომეტრია (დააჭირე ფასადზე დასაბრუნებლად)"
-        : "🔄 შეცვალე #1 და #2 ფოტო (ფასადი vs 3D იზომეტრია Cover-ად)";
+        ? "🔄 ახლა #1 ფოტოდ აყენია 3D იზომეტრია (დააჭირე ინტერიერზე დასაბრუნებლად)"
+        : "🔄 შეცვალე #1 და #2 ფოტო (ინტერიერი vs 3D იზომეტრია Cover-ად)";
       renderAll();
     }
 
