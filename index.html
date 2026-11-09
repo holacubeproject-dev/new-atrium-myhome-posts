@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyHome.ge / SS.ge — ახალი ატრიუმის 3 პოსტის სიმულატორი</title>
+  <style>
+    :root {
+      --bg: #f3f5f8;
+      --card: #ffffff;
+      --text: #1a202c;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --myhome-yellow: #ffcb05;
+      --myhome-green: #00b87c;
+      --vip-orange: #ff6b00;
+      --accent-blue: #2563eb;
+      --dark-navy: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Georgian", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+
+    /* Top MyHome-style Header */
+    .mh-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
+
+    .mh-header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .mh-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mh-logo {
+      background: var(--myhome-yellow);
+      color: #111;
+      font-weight: 900;
+      font-size: 18px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ss-logo {
+      background: #ff5a00;
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .mh-breadcrumb {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .mh-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--dark-navy);
+      color: #fff;
+      border-color: var(--dark-navy);
+    }
+
+    .cover-toggle-btn {
+      border: 1px solid #cbd5e1;
+      background: #fffbeb;
+      color: #92400e;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .cover-toggle-btn:hover {
+      background: #fef3c7;
+    }
+
+    /* Filter Bar Simulation */
+    .mh-filter-bar {
+      max-width: 1320px;
+      margin: 18px auto 10px;
+      padding: 0 20px;
+    }
+
+    .mh-filter-pills {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .pill {
+      background: #f1f5f9;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .pill.highlight {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+
+    /* SECTION 1: MYHOME FEED CARDS (3-Column Grid + Horizontal Feed) */
+    .section-title {
+      font-size: 19px;
+      font-weight: 800;
+      margin: 16px 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-sub {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .feed-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 1050px) {
+      .feed-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mh-card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .mh-card.vip-1 { border-color: #10b981; }
+    .mh-card.vip-2 { border-color: #f59e0b; }
+    .mh-card.vip-3 { border-color: #ef4444; }
+
+    .mh-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.11);
+    }
+
+    .mh-card-top-banner {
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vip-1 .mh-card-top-banner { background: linear-gradient(90deg, #059669, #10b981); }
+    .vip-2 .mh-card-top-banner { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .vip-3 .mh-card-top-banner { background: linear-gradient(90deg, #dc2626, #ef4444); }
+
+    .mh-card-media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: #0f172a;
+      overflow: hidden;
+    }
+
+    .mh-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    .mh-card-media img.contain-mode {
+      object-fit: contain;
+      background: #111827;
+    }
+
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.75);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .slider-nav:hover {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .slider-nav.prev { left: 10px; }
+    .slider-nav.next { right: 10px; }
+
+    .photo-counter-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .photo-role-pill {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffcb05;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      max-width: 85%;
+    }
+
+    .mh-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .mh-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .mh-total-price {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .mh-sqm-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: #059669;
+      background: #ecfdf5;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .mh-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1.35;
+    }
+
+    .mh-specs {
+      display: flex;
+      gap: 14px;
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .mh-address {
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mh-card-actions {
+      margin-top: auto;
+      padding-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-Jump {
+      flex: 1;
+      background: var(--dark-navy);
+      color: #fff;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-Jump:hover {
+      background: #1e293b;
+    }
+
+    /* DETAILED POST BREAKDOWN SECTIONS */
+    .post-detail-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .post-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 20px;
+    }
+
+    .post-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .badge-1 { background: #059669; }
+    .badge-2 { background: #d97706; }
+    .badge-3 { background: #dc2626; }
+
+    .post-detail-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .field-boxes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .field-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12.5px;
+    }
+
+    .field-box span {
+      color: var(--muted);
+      display: block;
+      font-size: 11px;
+    }
+
+    .field-box strong {
+      color: #0f172a;
+      font-size: 14px;
+    }
+
+    /* 10-PHOTO SEQUENCE STRIP */
+    .sequence-heading {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .photo-sequence-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1000px) {
+      .photo-sequence-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .seq-item {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .seq-item:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .seq-item.first-slot {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .seq-item.second-slot {
+      border-color: #10b981;
+      background: #ecfdf5;
+    }
+
+    .seq-num-bar {
+      padding: 5px 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .seq-item.first-slot .seq-num-bar {
+      background: #d97706;
+    }
+
+    .seq-item.second-slot .seq-num-bar {
+      background: #059669;
+    }
+
+    .seq-thumb-wrap {
+      aspect-ratio: 4 / 3;
+      background: #0f172a;
+      overflow: hidden;
+    }
+
+    .seq-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .seq-caption {
+      padding: 8px;
+      font-size: 11.5px;
+    }
+
+    .seq-caption strong {
+      display: block;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .seq-caption span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* Copy-Paste Text Box */
+    .copy-section {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .copy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .copy-btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .copy-text-pre {
+      white-space: pre-wrap;
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #1e293b;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* Native Lightbox Dialog */
+    dialog#photoDialog {
+      margin: auto;
+      border: none;
+      border-radius: 14px;
+      padding: 0;
+      max-width: 92vw;
+      max-height: 92vh;
+      background: #0f172a;
+      color: #fff;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    dialog#photoDialog::backdrop {
+      background-color: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(4px);
+    }
+
+    .dialog-inner {
+      display: flex;
+      flex-direction: column;
+      max-height: 92vh;
+    }
+
+    .dialog-top {
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .dialog-close {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .dialog-img-wrap {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .dialog-img-wrap img {
+      max-width: 86vw;
+      max-height: 78vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="mh-header">
+    <div class="mh-header-inner">
+      <div class="mh-brand">
+        <div class="mh-logo">🏠 myhome.ge</div>
+        <div class="ss-logo">SS.ge</div>
+        <span class="mh-breadcrumb">იყიდება → კომერციული ფართი → საოფისე → საბურთალო (გ. სააკაძის II გას. #19)</span>
+      </div>
+      <div class="mh-controls">
+        <button class="cover-toggle-btn" id="swapCoverBtn" onclick="toggleCoverMode()">
+          🔄 შეცვალე #1 და #2 ფოტო (ფასადი vs 3D იზომეტრია Cover-ად)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter Simulation Bar -->
+  <div class="mh-filter-bar">
+    <div class="mh-filter-pills">
+      <span class="pill highlight">📍 თბილისი, საბურთალო, სააკაძე</span>
+      <span class="pill highlight">🏢 პროექტი: ახალი ატრიუმი (NEW ATRIUM)</span>
+      <span class="pill">💵 საბაზისო ფასი: $2,200 / მ² (+ დღგ)</span>
+      <span class="pill">🟢 პოსტი #1: 50 მ² ($110,000)</span>
+      <span class="pill">🟠 პოსტი #2: 100 მ² ($220,000)</span>
+      <span class="pill">🔴 პოსტი #3: 150 მ² ($330,000)</span>
+    </div>
+    <div class="mh-filter-pills" style="margin-top: 8px; background: #ecfdf5; border-color: #a7f3d0;">
+      <strong style="font-size:12.5px; color:#065f46;">🟢 პოსტ #1-ის (50 მ²) ქავერის ვარიანტები:</strong>
+      <button class="tab-btn" onclick="setPost1Cover(0)">ვარიანტი 1: Office 301 (NEW ATRIUM ლოგოთი — 5K)</button>
+      <button class="tab-btn" onclick="setPost1Cover(1)">ვარიანტი 2: სტუდიო ყავის ზონით (5K)</button>
+      <button class="tab-btn" onclick="setPost1Cover(2)">ვარიანტი 3: კაბინეტი მტკვრის/ხიდის ხედით</button>
+      <button class="tab-btn" onclick="setPost1Cover(3)">ვარიანტი 4: ვიტრაჟული ოფისი ატრიუმის ხედით</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- SECTION 1: Feed Preview -->
+    <div class="section-title">
+      <span>1. როგორ ჩანს სამივე განცხადება MyHome.ge / SS.ge-ს საძიებო ლენტაში (Feed)</span>
+    </div>
+    <p class="section-sub">
+      ისრებით (◀ ▶) პირდაპირ ბარათზევე შეგიძლია გადაფურცლო 10-ვე ფოტო ზუსტად იმ რიგითობით, რა რიგითობითაც დაიდება საიტზე.
+    </p>
+
+    <div class="feed-grid" id="feedGrid"></div>
+
+    <!-- SECTION 2: Detailed 10-photo order + Copywriting for each post -->
+    <div class="section-title" style="margin-top: 20px;">
+      <span>2. სამივე პოსტის სრული გაშლა: რომელი ფოტო რის მერე მიდის (1–10) და რა ტექსტი აწერია</span>
+    </div>
+    <p class="section-sub">
+      დააწკაპუნე ნებისმიერ ფოტოზე გასადიდებლად. თითოეული პოსტის ქვემოთ მოცემულია ზუსტი სათაური, პარამეტრები და Copy-Paste აღწერა.
+    </p>
+
+    <div id="detailSections"></div>
+  </main>
+
+  <!-- Native Modal Dialog with closedby="any" -->
+  <dialog id="photoDialog" closedby="any" aria-labelledby="dialogTitle">
+    <div class="dialog-inner">
+      <div class="dialog-top">
+        <strong id="dialogTitle">ფოტოს ნახვა</strong>
+        <button class="dialog-close" onclick="document.getElementById('photoDialog').close()">✕ დახურვა (Esc)</button>
+      </div>
+      <div class="dialog-img-wrap">
+        <img id="dialogImg" src="" alt="Preview" fetchpriority="low" />
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    let use3DAsCover = false;
+    const POST1_COVERS = [
+      {
+        src: "Post_1_50m2/01_Office_Interior_5K.jpg",
+        label: "ფოტო #1 (Cover) — თანამედროვე ოფისი NEW ATRIUM ლოგოთი (5K)"
+      },
+      {
+        src: "Post_1_50m2/alt_cover_coworking_5K.jpg",
+        label: "ფოტო #1 (Cover) — საოფისე სტუდიო ყავის კუთხითა და ლაუნჯით (5K)"
+      },
+      {
+        src: "Post_1_50m2/alt_cover_library.jpg",
+        label: "ფოტო #1 (Cover) — კომპაქტური კაბინეტი მტკვრისა და ხიდის ხედით"
+      },
+      {
+        src: "Post_1_50m2/alt_cover_boardroom.jpg",
+        label: "ფოტო #1 (Cover) — ვიტრაჟული ოფისი ატრიუმის ხედით"
+      }
+    ];
+
+    function setPost1Cover(idx) {
+      POSTS[0].photos[0].src = POST1_COVERS[idx].src;
+      POSTS[0].photos[0].label = POST1_COVERS[idx].label;
+      sliderIndex[1] = 0;
+      renderAll();
+    }
+
+    const POSTS = [
+      {
+        id: 1,
+        vipClass: "vip-1",
+        badgeClass: "badge-1",
+        segmentLabel: "პოსტი #1 • ფარავს 35 მ² – 75 მ² ფილტრს (მცირე / საინვესტიციო ოფისი)",
+        area: "50 მ²",
+        totalPriceUSD: "$110,000",
+        totalPriceGEL: "299,200 ₾",
+        sqmPrice: "$2,200 / მ²",
+        floor: "2 / 7",
+        rooms: "2–3 ზონა",
+        folderPath: "/home/datunalinux123/Documents/antigravity/vibrant-meitner/MYHOME_SS_3_POSTS/Post_1_50m2",
+        title: "იყიდება A-კლასის საოფისე ფართები „ახალ ატრიუმში“ სააკაძეზე (35 მ² – 75 მ²)",
+        photos: [
+          {
+            src: "Post_1_50m2/01_Office_Interior_5K.jpg",
+            label: "ფოტო #1 (Cover) — თანამედროვე ოფისი NEW ATRIUM ლოგოთი (5K)",
+            why: "ლენტაში ჩანს 5K ხარისხის ნათელი ოფისი 4 სამუშაო მაგიდით, ვიტრაჟითა და კედელზე NEW ATRIUM-ის განათებული ლოგოთი"
+          },
+          {
+            src: "Post_1_50m2/02_3D_Isometric_50m2.jpg",
+            label: "ფოტო #2 — 50 მ² 3D იზომეტრია (4:3 მოუჭრელი ფორმატი)",
+            why: "მე-2 ფოტოზე გადასვლისთანავე მყიდველი ხედავს ზუსტ 50 მ² 3D გეგმარებას, მასშტაბსა და ფასს"
+          },
+          {
+            src: "Post_1_50m2/03_Exterior_Facade_4K.jpg",
+            label: "ფოტო #3 — შენობის გარეთა ფასადი (4K)",
+            why: "მე-3 ფოტოზე ხედავს თვითონ A-კლასის ბიზნესცენტრ „ახალ ატრიუმს“ გარედან"
+          },
+          {
+            src: "Post_1_50m2/04_3D_Isometric_75m2.jpg",
+            label: "ფოტო #4 — 75 მ² 3D იზომეტრია (ალტერნატიული ზომა)",
+            why: "აჩვენებს მყიდველს, რომ იქვეა 75 მ² ვარიანტიც უფრო დიდი გუნდისთვის"
+          },
+          {
+            src: "Post_1_50m2/05_Office_Interior_2.jpg",
+            label: "ფოტო #5 — კომპაქტური კაბინეტის ინტერიერი",
+            why: "მეორე შიდა რაკურსი მცირე საკონსულტაციო/იურიდიული გუნდისთვის"
+          },
+          {
+            src: "Post_1_50m2/06_Lobby_Reception_5K.jpg",
+            label: "ფოტო #6 — წარმომადგენლობითი ლობი და მიმღები (5K)",
+            why: "სტუმრის და კლიენტის პირველი შთაბეჭდილება შენობაში შემოსვლისას"
+          },
+          {
+            src: "Post_1_50m2/07_Central_Atrium_5K.jpg",
+            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            why: "შენობის მთავარი სავიზიტო ბარათი და ბუნებრივი სინათლის წყარო"
+          },
+          {
+            src: "Post_1_50m2/08_Floorplan_01_Units.png",
+            label: "ფოტო #8 — სართულის არქიტექტურული გეგმა (NS Studio)",
+            why: "ჩანს ზუსტი კვადრატულობები: 32.5 მ², 34.4 მ², 52.15 მ², 55.8 მ², 65.2 მ², 70 მ²"
+          },
+          {
+            src: "Post_1_50m2/09_Business_Cafe_Lounge_5K.jpg",
+            label: "ფოტო #9 — ბიზნეს-კაფე და ლაუნჯი (5K)",
+            why: "ყოველდღიური კომფორტი თანამშრომლებისა და საქმიანი შეხვედრებისთვის"
+          },
+          {
+            src: "Post_1_50m2/10_Location_Map_Saakadze.jpg",
+            label: "ფოტო #10 — ლოკაციის რუკა (სააკაძის II გას. #19)",
+            why: "აჩვენებს მისადგომობას ვახუშტის ხიდიდან (2 წთ) და სააკაძის მოედნიდან (3 წთ)"
+          }
+        ],
+        description: `იყიდება A-კლასის საოფისე ფართები მშენებარე ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — საბურთალოს ბიზნეს-ცენტრში, გ. სააკაძის II გასასვლელი #19 (ვახუშტის ხიდიდან 2 წუთში, სააკაძის მოედნიდან 3 წუთში).
+
+პროექტი წარმოადგენს უკვე მოქმედი, 98%-ით დატვირთული ბიზნესცენტრ „ატრიუმის“ გაგრძელებას და 100%-ით დაფინანსებულია TBC ბანკის მიერ ($11,000,000 გარანტია). მშენებლობა სრულდება 2026 წლის დეკემბერში.
+
+📌 მოცემულ განცხადებაში წარმოდგენილია 50 მ² ოპტიმალური საოფისე მოდულის 3D გეგმარება (იტევს 4–6 სამუშაო ადგილს, იზოლირებულ კაბინეტს/შეხვედრების ზონას, სამზარეულოს კუთხეს, სველ წერტილსა და საკუთარ ტერასას).
+📌 ამავე კატეგორიაში ხელმისაწვდომია სხვადასხვა კვადრატულობის ფართები: 32.5 მ², 34.4 მ², 50.2 მ², 55.9 მ², 68.8 მ² და 75 მ².
+
+🏢 ბიზნესცენტრის უპირატესობები და ინფრასტრუქტურა:
+• 7-სართულიანი ცენტრალური შუშის ატრიუმი ბუნებრივი განათებით
+• 130 მიწისქვეშა პარკინგი (-1 და -2 დონეებზე)
+• ფინური KONE-ს სწრაფმავალი პანორამული ლიფტები
+• ესპანური NEOLITH-ის ვენტილირებადი ქვის ფასადი და ენერგოეფექტური ალუმინის ვიტრაჟები
+• ბიზნეს-ლაუნჯი, კაფეტერია, ფიტნეს/ველნეს ზონა და 24/7 დაცვა/კონსიერჟი
+• ბარდება თეთრი კარკასის მდგომარეობით (მონოლითური თავისუფალი გეგმარება)
+
+💰 ფინანსური და საინვესტიციო პირობები:
+• საწყისი ფასი: $2,200 / მ² (+ დღგ)
+• საპროგნოზო იჯარა: $22 – $25 / მ² (+ დღგ)
+• წლიური უკუგება (ROI): 12% – 14% | კაპიტალის ზრდა დასრულებისას: +20%
+
+დაგვიკავშირდით დეტალური გეგმარებებისა და სართულების შესარჩევად.`
+      },
+      {
+        id: 2,
+        vipClass: "vip-2",
+        badgeClass: "badge-2",
+        segmentLabel: "პოსტი #2 • ფარავს 80 მ² – 130 მ² ფილტრს (საშუალო ბიზნეს-სუიტი აივნით)",
+        area: "100 მ²",
+        totalPriceUSD: "$220,000",
+        totalPriceGEL: "598,400 ₾",
+        sqmPrice: "$2,200 / მ²",
+        floor: "3 / 7",
+        rooms: "4–5 ზონა",
+        folderPath: "/home/datunalinux123/Documents/antigravity/vibrant-meitner/MYHOME_SS_3_POSTS/Post_2_100m2",
+        title: "იყიდება 100 მ² კუთხის A-კლასის ოფისი ტერასით ბიზნესცენტრ „ახალ ატრიუმში“",
+        photos: [
+          {
+            src: "Post_2_100m2/01_Corner_Office_Interior.jpg",
+            label: "ფოტო #1 (Cover) — 100 მ² კუთხის ოფისის შიდა რენდერი",
+            why: "ლენტაში პირველივე კადრით აჩვენებს პრესტიჟულ კუთხის პანორამულ ინტერიერს"
+          },
+          {
+            src: "Post_2_100m2/02_3D_Isometric_100m2.jpg",
+            label: "ფოტო #2 — 100 მ² 3D იზომეტრია (4:3 მოუჭრელი ფორმატი)",
+            why: "მე-2 ფოტოზე აჩვენებს 100 მ²-ის სრულ დატვირთვას: Open Space + კაბინეტი + Meeting Room + Reception"
+          },
+          {
+            src: "Post_2_100m2/03_Exterior_Facade_5K.jpg",
+            label: "ფოტო #3 — შენობის გარეთა ფასადი (5K)",
+            why: "მე-3 ფოტოდ მოსდევს ბიზნესცენტრის გარეთა არქიტექტურა"
+          },
+          {
+            src: "Post_2_100m2/04_Open_Space_Interior_5K.jpg",
+            label: "ფოტო #4 — 10–14 კაციანი Open Space ინტერიერი (5K)",
+            why: "აჩვენებს გუნდური მუშაობის სივრცეს და აკუსტიკურ ჭერს"
+          },
+          {
+            src: "Post_2_100m2/05_Meeting_Room.jpg",
+            label: "ფოტო #5 — თათბირების ოთახი (Meeting Room)",
+            why: "აჩვენებს შუშის ტიხრებით გამოყოფილ შეხვედრების ზონას"
+          },
+          {
+            src: "Post_2_100m2/06_100m2_Balcony_Layout.jpg",
+            label: "ფოტო #6 — 100.0 მ² (86.2 მ² ოფისი + 13.8 მ² აივანი)",
+            why: "ზუსტი პროპორცია აივნისა და შიდა ფართის + L-ფორმის 3D ჭრილი"
+          },
+          {
+            src: "Post_2_100m2/07_Central_Atrium_5K.jpg",
+            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            why: "აჩვენებს შიდა ატრიუმის მასშტაბსა და გალერეებს"
+          },
+          {
+            src: "Post_2_100m2/08_Floorplan_02_Units.png",
+            label: "ფოტო #8 — მე-2 სართულის არქიტექტურული ნახაზი",
+            why: "ჩანს 90.72 მ², 103.1 მ², 105.38 მ², 122.37 მ² და 137.62 მ² ერთეულები"
+          },
+          {
+            src: "Post_2_100m2/09_Lobby_Reception_5K.jpg",
+            label: "ფოტო #9 — ლობი და მიმღები (5K)",
+            why: "A-კლასის ბიზნესცენტრის შესასვლელი და კონსიერჟის ზონა"
+          },
+          {
+            src: "Post_2_100m2/10_Location_Map_Saakadze.jpg",
+            label: "ფოტო #10 — ლოკაციის რუკა",
+            why: "სააკაძის II გასასვლელი #19 — მისადგომობა ყველა კვანძიდან"
+          }
+        ],
+        description: `იყიდება პრემიუმ კლასის საოფისე ფართები მშენებარე A-კლასის ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — გ. სააკაძის II გასასვლელი #19.
+
+პროექტი 100%-ით დაფინანსებულია TBC ბანკის მიერ ($11,000,000 გარანტია) და წარმოადგენს მოქმედი, სრულად დატვირთული ბიზნესცენტრ „ატრიუმის“ გაგრძელებას. ბარდება 2026 წლის დეკემბერში.
+
+📌 მოცემულ განცხადებაში წარმოდგენილია 100 მ² ბიზნეს-სუიტის გეგმარება (86.2 მ² შიდა საოფისე სივრცე + 13.8 მ² საკუთარი აივანი/ტერასა): თავისუფლად განთავსდება 10–14 კაციანი Open Space, დირექტორის იზოლირებული კაბინეტი, შეხვედრების ოთახი (Meeting Room), მიმღები (Reception), სამზარეულო და სველი წერტილი.
+📌 ამავე კატეგორიაში ხელმისაწვდომია: 86 მ², 90.1 მ², 100 მ², 103.1 მ², 122.4 მ² და 130 მ² საოფისე ერთეულები.
+
+🏢 ბიზნესცენტრის სტანდარტი და ინფრასტრუქტურა:
+• 12,400 მ² A-კლასის ბიზნეს-ეკოსისტემა 7-სართულიანი შუშის ატრიუმით
+• 130 მიწისქვეშა პარკინგი (-1 და -2 სართულებზე)
+• ფინური KONE-ს პანორამული ლიფტები და ესპანური NEOLITH-ის ვენტილირებადი ფასადი
+• წარმომადგენლობითი ლობი კონსიერჟით, ბიზნეს-ლაუნჯი, კაფე და ფიტნეს/ველნეს ზონა
+• მონოლითური კონსტრუქცია (საყრდენი კედლების გარეშე — ნებისმიერი ტიხრების მოწყობის შესაძლებლობით)
+
+💰 ფინანსური და საინვესტიციო პირობები:
+• საწყისი ფასი: $2,200 / მ² (+ დღგ)
+• საპროგნოზო იჯარა: $22 – $25 / მ² (+ დღგ)
+• წლიური უკუგება (ROI): 12% – 14% | კაპიტალის ზრდა ჩაბარებისას: +20%
+
+დაგვიკავშირდით დეტალური ნახაზებისა და პრეზენტაციის მისაღებად.`
+      },
+      {
+        id: 3,
+        vipClass: "vip-3",
+        badgeClass: "badge-3",
+        segmentLabel: "პოსტი #3 • ფარავს 150 მ² – 1,650 მ² ფილტრს (კორპორატიული ფრთა / სათავო ოფისი)",
+        area: "150 მ²",
+        totalPriceUSD: "$330,000",
+        totalPriceGEL: "897,600 ₾",
+        sqmPrice: "$2,200 / მ²",
+        floor: "5 / 7",
+        rooms: "6+ ზონა",
+        folderPath: "/home/datunalinux123/Documents/antigravity/vibrant-meitner/MYHOME_SS_3_POSTS/Post_3_150m2",
+        title: "იყიდება კორპორატიული საოფისე ფართები „ახალ ატრიუმში“ სააკაძეზე (150 მ² – 1,650 მ²)",
+        photos: [
+          {
+            src: "Post_3_150m2/01_Executive_Open_Space.jpg",
+            label: "ფოტო #1 (Cover) — 150 მ²+ აღმასრულებელი დარბაზის შიდა რენდერი",
+            why: "ლენტაში პირველივე კადრით აჩვენებს დიდ კორპორატიულ მასშტაბსა და პანორამას"
+          },
+          {
+            src: "Post_3_150m2/02_3D_Isometric_150m2.jpg",
+            label: "ფოტო #2 — 150 მ² 3D იზომეტრია (4:3 მოუჭრელი ფორმატი)",
+            why: "მე-2 ფოტოზე მკაფიოდ ჩანს საკონფერენციო დარბაზი (Boardroom), Reception, კაბინეტები და Open Space"
+          },
+          {
+            src: "Post_3_150m2/03_Exterior_Facade_Corner.jpg",
+            label: "ფოტო #3 — შენობის გარეთა კუთხის ფასადი",
+            why: "მე-3 ფოტოდ მოსდევს შენობის მასშტაბური გარეთა ხედი"
+          },
+          {
+            src: "Post_3_150m2/04_Boardroom_Conference.jpg",
+            label: "ფოტო #4 — საკონფერენციო დარბაზი (Boardroom)",
+            why: "კორპორატიული მყიდველისთვის აუცილებელი საპრეზენტაციო/სათათბირო სივრცე"
+          },
+          {
+            src: "Post_3_150m2/05_President_Suite_5K.jpg",
+            label: "ფოტო #5 — დამფუძნებლის / CEO-ს კაბინეტი (5K)",
+            why: "უმაღლესი კლასის აღმასრულებელი სივრცე პანორამული ვიტრაჟებით"
+          },
+          {
+            src: "Post_3_150m2/06_150m2_Corporate_Wing_Card.jpg",
+            label: "ფოტო #6 — 150 მ² კორპორატიული ფრთის ვიზუალი + 3D",
+            why: "აერთიანებს რეალისტურ ინტერიერსა და 3D მაკეტს"
+          },
+          {
+            src: "Post_3_150m2/07_Central_Atrium_5K.jpg",
+            label: "ფოტო #7 — 7-სართულიანი ცენტრალური შუშის ატრიუმი (5K)",
+            why: "აჩვენებს მთლიანი სართულებისა და ატრიუმის კავშირს"
+          },
+          {
+            src: "Post_3_150m2/08_Floorplan_03_04_Units.png",
+            label: "ფოტო #8 — მსხვილი ბლოკების არქიტექტურული გეგმა",
+            why: "ნაჩვენებია 180.2 მ², 203.9 მ², 368.5 მ², 398.4 მ² და მთლიანი სართულის (1,650 მ²) კონფიგურაცია"
+          },
+          {
+            src: "Post_3_150m2/09_Wellness_Fitness_4K.jpg",
+            label: "ფოტო #9 — ფიტნეს და ველნეს ზონა (4K)",
+            why: "მსხვილი კომპანიებისთვის HR-უპირატესობა (თანამშრომლების კეთილდღეობა შენობაშივე)"
+          },
+          {
+            src: "Post_3_150m2/10_Location_Map_Saakadze.jpg",
+            label: "ფოტო #10 — ლოკაციის რუკა",
+            why: "გ. სააკაძის II გასასვლელი #19"
+          }
+        ],
+        description: `იყიდება მსხვილი კორპორატიული საოფისე ფართები A-კლასის ბიზნესცენტრ „ახალ ატრიუმში“ (NEW ATRIUM) — გ. სააკაძის II გასასვლელი #19, საბურთალო.
+
+პროექტი 100%-ით დაფინანსებულია TBC ბანკის მიერ ($11,000,000 გარანტია) და სრულდება 2026 წლის დეკემბერში. იდეალურია კომპანიის სათავო ოფისისთვის (Headquarters), წარმომადგენლობისთვის ან მსხვილი საინვესტიციო პორტფელისთვის.
+
+📌 მოცემულ განცხადებაში წარმოდგენილია 150 მ² კორპორატიული ფრთის 3D გეგმარება: მოიცავს საკონფერენციო დარბაზს (Boardroom), მიმღებსა და მოსაცდელ ზონას (Reception), მენეჯმენტის კაბინეტებს, 20+ კაციან Open Space-ს, სამზარეულოს, სველ წერტილებსა და პანორამულ ტერასას.
+📌 მონოლითური თავისუფალი გეგმარება საშუალებას იძლევა შეარჩიოთ ან გააერთიანოთ თქვენთვის სასურველი მასშტაბი: 150 მ², 180.2 მ², 203.9 მ², 368.5 მ², 608 მ² ან მთლიანი სართული — 1,650 მ².
+
+🏢 ბიზნესცენტრის სტანდარტი და ინფრასტრუქტურა:
+• 12,400 მ² საერთო ფართობი | 7 სართული ცენტრალური შუშის ატრიუმით
+• 130 მიწისქვეშა პარკინგი (-1 და -2 დონეებზე)
+• ფინური KONE-ს პანორამული ლიფტები | ესპანური NEOLITH-ის ვენტილირებადი ქვის ფასადი
+• ბიზნეს-ლაუნჯი, კაფეტერია, ფიტნეს და ველნეს სივრცე თანამშრომლებისთვის
+• ბარდება თეთრი კარკასის მდგომარეობით — ინდივიდუალური დაგეგმარების სრული თავისუფლებით
+
+💰 ფინანსური და საინვესტიციო პირობები:
+• საწყისი ფასი: $2,200 / მ² (+ დღგ)
+• საპროგნოზო იჯარა: $22 – $25 / მ² (+ დღგ)
+• წლიური უკუგება (ROI): 12% – 14% | კაპიტალის ზრდა დასრულებისას: +20%
+
+დაგვიკავშირდით პერსონალური შეთავაზებისა და სართულების გეგმარების გასაცნობად.`
+      }
+    ];
+
+    const sliderIndex = { 1: 0, 2: 0, 3: 0 };
+
+    function getOrderedPhotos(post) {
+      const arr = [...post.photos];
+      if (use3DAsCover) {
+        const temp = arr[0];
+        arr[0] = arr[1];
+        arr[1] = temp;
+      }
+      return arr;
+    }
+
+    function renderAll() {
+      const feedGrid = document.getElementById("feedGrid");
+      const detailSections = document.getElementById("detailSections");
+      feedGrid.innerHTML = "";
+      detailSections.innerHTML = "";
+
+      POSTS.forEach((post, pIdx) => {
+        const photos = getOrderedPhotos(post);
+        const curIdx = sliderIndex[post.id] || 0;
+        const curPhoto = photos[curIdx];
+
+        // 1. Feed Card
+        const card = document.createElement("article");
+        card.className = `mh-card ${post.vipClass}`;
+        card.innerHTML = `
+          <div class="mh-card-top-banner">
+            <span>SUPER VIP • პოსტი #${post.id} (${post.area})</span>
+            <span>NEW ATRIUM</span>
+          </div>
+          <div class="mh-card-media">
+            <span class="photo-role-pill">${curIdx + 1}/10: ${curPhoto.label.replace(/^ფოტო #\d+\s*(\(Cover\))?\s*—\s*/, '')}</span>
+            <img
+              src="${curPhoto.src}"
+              alt="${post.title}"
+              ${pIdx === 0 ? 'fetchpriority="high"' : ''}
+              onclick="openLightbox('${curPhoto.src}', '${post.title.replace(/'/g, "\\'")} — ${curPhoto.label.replace(/'/g, "\\'")}')"
+            />
+            <button class="slider-nav prev" onclick="slideCard(${post.id}, -1)" aria-label="წინა ფოტო">◀</button>
+            <button class="slider-nav next" onclick="slideCard(${post.id}, 1)" aria-label="შემდეგი ფოტო">▶</button>
+            <span class="photo-counter-badge">📷 ${curIdx + 1} / ${photos.length}</span>
+          </div>
+          <div class="mh-card-body">
+            <div class="mh-price-row">
+              <div>
+                <div class="mh-total-price">${post.totalPriceUSD}</div>
+                <div style="font-size:12px; color:#64748b;">≈ ${post.totalPriceGEL} (+ დღგ)</div>
+              </div>
+              <div class="mh-sqm-price">${post.sqmPrice}</div>
+            </div>
+            <div class="mh-title">${post.title}</div>
+            <div class="mh-specs">
+              <span>📐 ${post.area}</span>
+              <span>🏢 სართული: ${post.floor}</span>
+              <span>🚪 ${post.rooms}</span>
+            </div>
+            <div class="mh-address">📍 თბილისი, საბურთალო, გ. სააკაძის II გასასვლელი #19</div>
+            <div class="mh-card-actions">
+              <a href="#post-detail-${post.id}" class="btn-Jump">👇 ნახე 10-ვე ფოტოს წყობა და ტექსტი</a>
+            </div>
+          </div>
+        `;
+        feedGrid.appendChild(card);
+
+        // 2. Detailed Breakdown Section
+        const detail = document.createElement("section");
+        detail.className = "post-detail-card";
+        detail.id = `post-detail-${post.id}`;
+
+        const seqHtml = photos.map((ph, i) => `
+          <div class="seq-item ${i === 0 ? 'first-slot' : i === 1 ? 'second-slot' : ''}"
+               onclick="openLightbox('${ph.src}', 'პოსტი #${post.id} (${post.area}) — ფოტო #${i + 1}: ${ph.label.replace(/'/g, "\\'")}')">
+            <div class="seq-num-bar">
+              <span>ფოტო #${i + 1} ${i === 0 ? '⭐ COVER' : i === 1 ? '📐 3D ზომა' : ''}</span>
+              <span>🔍</span>
+            </div>
+            <div class="seq-thumb-wrap">
+              <img src="${ph.src}" alt="${ph.label}" loading="lazy" />
+            </div>
+            <div class="seq-caption">
+              <strong>${ph.label.replace(/^ფოტო #\d+\s*(\(Cover\))?\s*—\s*/, '')}</strong>
+              <span>${ph.why}</span>
+            </div>
+          </div>
+        `).join("");
+
+        detail.innerHTML = `
+          <div class="post-detail-header">
+            <div>
+              <span class="post-badge ${post.badgeClass}">${post.segmentLabel}</span>
+              <h2 class="post-detail-title">${post.title}</h2>
+              <div class="field-boxes">
+                <div class="field-box"><span>ფართის ველში:</span><strong>${post.area}</strong></div>
+                <div class="field-box"><span>ჯამური ფასი ($):</span><strong>${post.totalPriceUSD}</strong></div>
+                <div class="field-box"><span>1 მ² ფასი:</span><strong>${post.sqmPrice} (+ დღგ)</strong></div>
+                <div class="field-box"><span>სართული:</span><strong>${post.floor}</strong></div>
+                <div class="field-box"><span>მდგომარეობა:</span><strong>თეთრი კარკასი (დეკ. 2026)</strong></div>
+              </div>
+            </div>
+            <div>
+              <button class="copy-btn" style="background:#0f172a;" onclick="copyText('${post.folderPath}', this)">
+                📂 პაპკის მისამართის კოპირება
+              </button>
+            </div>
+          </div>
+
+          <div class="sequence-heading">
+            <span>📸 ფოტოების ზუსტი რიგითობა (1-დან 10-მდე) — დააწკაპუნე გასადიდებლად:</span>
+          </div>
+          <div class="photo-sequence-grid">
+            ${seqHtml}
+          </div>
+
+          <div class="copy-section">
+            <div class="copy-header">
+              <strong>📝 სიტყვიერი აღწერა (პირდაპირ ჩასაკოპირებელი MyHome.ge-სა და SS.ge-ზე):</strong>
+              <button class="copy-btn" onclick="copyPostDescription(${post.id}, this)">📋 ტექსტის კოპირება</button>
+            </div>
+            <div class="copy-text-pre" id="desc-text-${post.id}">${post.description}</div>
+          </div>
+        `;
+        detailSections.appendChild(detail);
+      });
+    }
+
+    function slideCard(postId, dir) {
+      const post = POSTS.find(p => p.id === postId);
+      const len = post.photos.length;
+      sliderIndex[postId] = (sliderIndex[postId] + dir + len) % len;
+      renderAll();
+    }
+
+    function toggleCoverMode() {
+      use3DAsCover = !use3DAsCover;
+      sliderIndex[1] = 0;
+      sliderIndex[2] = 0;
+      sliderIndex[3] = 0;
+      const btn = document.getElementById("swapCoverBtn");
+      btn.textContent = use3DAsCover
+        ? "🔄 ახლა #1 ფოტოდ აყენია 3D იზომეტრია (დააჭირე ფასადზე დასაბრუნებლად)"
+        : "🔄 შეცვალე #1 და #2 ფოტო (ფასადი vs 3D იზომეტრია Cover-ად)";
+      renderAll();
+    }
+
+    function copyPostDescription(postId, btnEl) {
+      const post = POSTS.find(p => p.id === postId);
+      navigator.clipboard.writeText(post.title + "\n\n" + post.description);
+      const orig = btnEl.textContent;
+      btnEl.textContent = "✅ დაკოპირდა!";
+      setTimeout(() => { btnEl.textContent = orig; }, 1800);
+    }
+
+    function copyText(txt, btnEl) {
+      navigator.clipboard.writeText(txt);
+      const orig = btnEl.textContent;
+      btnEl.textContent = "✅ მისამართი დაკოპირდა!";
+      setTimeout(() => { btnEl.textContent = orig; }, 1800);
+    }
+
+    const dialog = document.getElementById("photoDialog");
+    function openLightbox(src, title) {
+      document.getElementById("dialogImg").src = src;
+      document.getElementById("dialogTitle").textContent = title;
+      dialog.showModal();
+    }
+
+    // Fallback for browsers without closedby support
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      dialog.addEventListener('click', (event) => {
+        if (event.target !== dialog) return;
+        const rect = dialog.getBoundingClientRect();
+        const isDialogContent = (
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width
+        );
+        if (isDialogContent) return;
+        dialog.close();
+      });
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
